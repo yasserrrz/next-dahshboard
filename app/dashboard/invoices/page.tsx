@@ -40,10 +40,10 @@ export default async function Page( props : {
   searchParams? : Promise<{
     query?: string;
     page?: string;
-    
   }>
 }) {
   const searchParams = await props.searchParams;
+  console.log(searchParams);
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchInvoicesPages(query);
@@ -53,6 +53,7 @@ export default async function Page( props : {
         <h1 className={`${lusitana.className} text-2xl`}>Invoices</h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+        {/* Your search functionality will span the client and the server. When a user searches for an invoice on the client, the URL params will be updated, data will be fetched on the server, and the table will re-render on the server with the new data. */}
         <Search placeholder="Search invoices..." />
         <CreateInvoice />
       </div>

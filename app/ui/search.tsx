@@ -8,6 +8,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+
   // function handleSearch(term: string) {
   //   console.log(`Searching... ${term}`);
   //   // give URLSearchParams params the default value of the current url search params
@@ -22,13 +23,13 @@ export default function Search({ placeholder }: { placeholder: string }) {
   //   console.log("params : ", params.toString()); // include the query string only >> query=search-value || query=ssss&page=1&limit=10
   //   console.log("pathname : ", pathname); // 'dashboard/invoices' not inclode the base url or domain also not include the query
   //   replace(`${pathname}?${params.toString()}`);
-
   // }
 
 
   // using debouncing
   const handleSearch = useDebouncedCallback((term) => {
     console.log(`Searching... ${term}`);
+    //**URLSearchParams is a JavaScript API for working with query strings in URLs. It allows easy manipulation (reading, adding, updating, and deleting) of query parameters.
     const params = new URLSearchParams(searchParams);
     params.set('page', '1');
     if (term) {
