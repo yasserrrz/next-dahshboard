@@ -1,17 +1,17 @@
-import Pagination from '@/app/ui/invoices/pagination';
-import Search from '@/app/ui/search';
-import Table from '@/app/ui/invoices/table';
-import { CreateInvoice } from '@/app/ui/invoices/buttons';
-import { lusitana } from '@/app/ui/fonts';
-import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
-import { Suspense } from 'react';
-import { fetchInvoicesPages } from '@/app/lib/data';
- 
+import Pagination from "@/app/ui/invoices/pagination";
+import Search from "@/app/ui/search";
+import Table from "@/app/ui/invoices/table";
+import { CreateInvoice } from "@/app/ui/invoices/buttons";
+import { lusitana } from "@/app/ui/fonts";
+import { InvoicesTableSkeleton } from "@/app/ui/skeletons";
+import { Suspense } from "react";
+import { fetchInvoicesPages } from "@/app/lib/data";
+
 //  const props = {
 //    searchParams? : Promise<{
 //      query?: string;
 //      page?: string;
-     
+
 //    }>
 //  }
 /*
@@ -36,16 +36,37 @@ Error Prevention: TypeScript will alert you if you try to access searchParams.qu
 Documentation: It’s a clear, self-documenting way to define what data the component expects, making it more maintainable and readable for other developers.
 Example Without a Generic Type
 */
-export default async function Page( props : {
-  searchParams? : Promise<{
+
+
+
+
+// if we dont want to use api end point we can make it like this :
+/***
+ * 
+ * async function fetchInvoices(query: string, page: number) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/invoices?query=${query}&page=${page}`,
+    { cache: 'no-store' } // Ensures the data is always fresh for each request
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch invoices');
+  }
+
+  return res.json(); // Parse JSON response
+}
+ */
+export default async function Page(props: {
+  searchParams?: Promise<{
     query?: string;
     page?: string;
-  }>
+  }>;
 }) {
   const searchParams = await props.searchParams;
   console.log(searchParams);
-  const query = searchParams?.query || '';
+  const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
+  // The fetchInvoicesPages function uses a database query (sql), meaning it executes at runtime on the server (SSR).
   const totalPages = await fetchInvoicesPages(query);
   return (
     <div className="w-full">
@@ -57,7 +78,7 @@ export default async function Page( props : {
         <Search placeholder="Search invoices..." />
         <CreateInvoice />
       </div>
-       <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
+      <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
         <Table query={query} currentPage={currentPage} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
